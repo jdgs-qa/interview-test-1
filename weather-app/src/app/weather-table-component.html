@@ -1,0 +1,52 @@
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" />
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let row">
+        <span *ngFor="let weather of row.weather">
+          <img src="http://openweathermap.org/img/wn/{{weather.icon}}@2x.png" />
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="pressure">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Pressure</th>
+      <td mat-cell *matCellDef="let row">{{row.main.pressure}} mbar</td>
+    </ng-container>
+
+    <ng-container matColumnDef="temp">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Temperature</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.main.temp | number: '2.0-1'}} ℃
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="humid">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Humidty</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.main.humidity}} %
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="cloud">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cloud Cover/th></th>
+      <td mat-cell *matCellDef="let row">
+        {{row.main.clouds.all}} %
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>
