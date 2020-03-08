@@ -21,7 +21,6 @@ You are not timed and can take as long as you wish to complete this task. You'll
 
 This project makes use of the open weather API for current weather conditions.
 
-> The API key to use for this project is: **194333f5b09188fbda8c4a3bbfea30b2**
 > See https://openweathermap.org/current for documentation on the API
 
 If you return weather data on multiple cities, each city should contain the following data: 
