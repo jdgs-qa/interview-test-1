@@ -58,6 +58,7 @@ export class WeatherTableComponent implements OnInit {
     "wind.speed"
   ];
   dataSource: MatTableDataSource<WeatherData>;
+  averageTemp: number = 0;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -86,6 +87,15 @@ export class WeatherTableComponent implements OnInit {
               }
             };
             this.dataSource.sort = this.sort;
+            const totalTemp: number = res.body
+              .map(item => {
+                return item.main.temp;
+              })
+              .reduce((previous, current) => {
+                return previous + current;
+              });
+            this.averageTemp =
+              Math.round((totalTemp / res.body.length) * 100) / 100;
           }
         }
       )
