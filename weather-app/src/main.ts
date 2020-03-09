@@ -11,7 +11,6 @@ import { DemoMaterialModule } from "./app/material-module";
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 
 import { WeatherTableComponent } from "./app/weather-table-component";
-import { WeatherBarChartComponent } from "./app/weather-bar-chart/weather-bar-chart.component";
 import { ChartsModule } from "ng2-charts";
 
 @NgModule({
@@ -26,8 +25,8 @@ import { ChartsModule } from "ng2-charts";
     ChartsModule
   ],
   entryComponents: [WeatherTableComponent],
-  declarations: [WeatherTableComponent, WeatherBarChartComponent],
-  bootstrap: [WeatherTableComponent, WeatherBarChartComponent],
+  declarations: [WeatherTableComponent],
+  bootstrap: [WeatherTableComponent],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

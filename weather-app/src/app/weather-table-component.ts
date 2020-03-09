@@ -44,7 +44,7 @@ enum UNITS {
 
 @Component({
   selector: "weather-table-component",
-  styleUrls: ["weather-table-component.css"],
+  styleUrls: ["weather-table-component.sass"],
   templateUrl: "weather-table-component.html"
 })
 export class WeatherTableComponent implements OnInit {
@@ -60,8 +60,51 @@ export class WeatherTableComponent implements OnInit {
   dataSource: MatTableDataSource<WeatherData>;
   averageTemp: number = 0;
 
+  chartOptions = {
+    responsive: true,
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            maxRotation: 100
+          }
+        }
+      ],
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Temperature, ℃"
+          }
+        }
+      ]
+    }
+  };
+  chartData: [{ data: number[] }] = [{ data: [] }];
+
+  chartLabels: string[] = [];
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  redrawTable() {
+    const totalTemp: number = this.dataSource.data
+      .map(item => {
+        return item.main.temp;
+      })
+      .reduce((previous, current) => {
+        return previous + current;
+      });
+    this.averageTemp =
+      Math.round((totalTemp / this.dataSource.data.length) * 100) / 100;
+
+    this.chartData[0].data = this.dataSource.data.map(item => {
+      return item.main.temp;
+    });
+    this.chartLabels = this.dataSource.data.map(item => {
+      return item.name;
+    });
+  }
 
   constructor() {
     getNearbyWeather()
@@ -87,18 +130,12 @@ export class WeatherTableComponent implements OnInit {
               }
             };
             this.dataSource.sort = this.sort;
-            const totalTemp: number = res.body
-              .map(item => {
-                return item.main.temp;
-              })
-              .reduce((previous, current) => {
-                return previous + current;
-              });
-            this.averageTemp =
-              Math.round((totalTemp / res.body.length) * 100) / 100;
           }
         }
       )
+      .then(() => {
+        this.redrawTable();
+      })
       .catch(e => {
         console.warn(`Unable to fetch weather data from API. Error ${e}`);
       });
@@ -110,6 +147,8 @@ export class WeatherTableComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
 
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    this.redrawTable();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

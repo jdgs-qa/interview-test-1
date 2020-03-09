@@ -1,4 +1,22 @@
-<p>Current average temperature: {{[averageTemp]}} ℃</p>
+<h1>
+  <span class="weather_title">
+    Current Weather in Greater Nottingham
+  </span>
+  <span class="weather_average">Average temp {{[averageTemp]}} ℃</span>
+</h1>
+
+<div class="weather_chart">
+  <canvas
+    baseChart
+    [chartType]="'bar'"
+    [datasets]="chartData"
+    [labels]="chartLabels"
+    [options]="chartOptions"
+    [legend]="false"
+  >
+  </canvas>
+</div>
+
 <mat-form-field>
   <mat-label>Filter</mat-label>
   <input
