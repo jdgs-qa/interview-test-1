@@ -35,7 +35,8 @@ export async function getNearbyWeather(
 }
 
 export async function getSingleCity(
-  city: string = "Nottingham"
+  city: string = "Nottingham",
+  units: UNITS = UNITS.metric
 ): Promise<Object> {
   let response: { success: boolean; body?: object[]; error?: string } = {
     success: false
@@ -43,11 +44,11 @@ export async function getSingleCity(
 
   try {
     const axiosResponse = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}`
     );
     if (axiosResponse.status === 200) {
       response.success = true;
-      response.body = axiosResponse.data;
+      response.body = [axiosResponse.data];
       return response;
     }
   } catch (e) {
