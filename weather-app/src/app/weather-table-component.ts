@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
@@ -36,18 +36,12 @@ export interface WeatherData {
   ];
 }
 
-enum UNITS {
-  metric = "metric",
-  imperial = "imperial",
-  default = ""
-}
-
 @Component({
   selector: "weather-table-component",
   styleUrls: ["weather-table-component.sass"],
   templateUrl: "weather-table-component.html"
 })
-export class WeatherTableComponent implements OnInit {
+export class WeatherTableComponent {
   displayedColumns: string[] = [
     "name",
     "symbol",
@@ -58,7 +52,7 @@ export class WeatherTableComponent implements OnInit {
     "wind.speed"
   ];
   dataSource: MatTableDataSource<WeatherData>;
-  averageTemp: number = 0;
+  averageTemp = 0;
 
   chartOptions = {
     responsive: true,
@@ -87,21 +81,21 @@ export class WeatherTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  redrawTable() {
+  redrawTable(): void {
     const totalTemp: number = this.dataSource.data
-      .map(item => {
+      .map((item): number => {
         return item.main.temp;
       })
-      .reduce((previous, current) => {
+      .reduce((previous, current): number => {
         return previous + current;
       });
     this.averageTemp =
       Math.round((totalTemp / this.dataSource.data.length) * 100) / 100;
 
-    this.chartData[0].data = this.dataSource.data.map(item => {
+    this.chartData[0].data = this.dataSource.data.map((item): number => {
       return item.main.temp;
     });
-    this.chartLabels = this.dataSource.data.map(item => {
+    this.chartLabels = this.dataSource.data.map((item): string => {
       return item.name;
     });
   }
@@ -113,7 +107,10 @@ export class WeatherTableComponent implements OnInit {
           if (res.success) {
             this.dataSource = new MatTableDataSource(res.body);
             this.dataSource.paginator = this.paginator;
-            this.dataSource.sortingDataAccessor = (item, property) => {
+            this.dataSource.sortingDataAccessor = (
+              item,
+              property
+            ): number | string => {
               switch (property) {
                 case "main.pressure":
                   return item.main.pressure;
@@ -141,9 +138,7 @@ export class WeatherTableComponent implements OnInit {
       });
   }
 
-  ngOnInit() {}
-
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
 
     this.dataSource.filter = filterValue.trim().toLowerCase();

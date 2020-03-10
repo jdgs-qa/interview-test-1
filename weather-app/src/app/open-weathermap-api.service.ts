@@ -9,12 +9,12 @@ export enum UNITS {
 }
 
 export async function getNearbyWeather(
-  lat: number = 52.95,
-  lon: number = -1.15,
-  count: number = 50,
+  lat = 52.95,
+  lon = -1.15,
+  count = 50,
   units: UNITS = UNITS.metric
-): Promise<Object> {
-  let response: { success: boolean; body?: object[]; error?: string } = {
+): Promise<Record<string, any>> {
+  const response: { success: boolean; body?: object[]; error?: string } = {
     success: false
   };
 
@@ -35,10 +35,10 @@ export async function getNearbyWeather(
 }
 
 export async function getSingleCity(
-  city: string = "Nottingham",
+  city = "Nottingham",
   units: UNITS = UNITS.metric
-): Promise<Object> {
-  let response: { success: boolean; body?: object[]; error?: string } = {
+): Promise<Record<string, any>> {
+  const response: { success: boolean; body?: object[]; error?: string } = {
     success: false
   };
 
